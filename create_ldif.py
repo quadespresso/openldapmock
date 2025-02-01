@@ -55,7 +55,6 @@ givenName: {first_name}
 cn: {first_name} {last_name}
 mail: {username}@my-domain.com
 telephoneNumber: {fake.phone_number()}
-memberOf: cn={group},ou=groups,dc=my-domain,dc=com
 userPassword: {username}_{random_string}
 """
         ldif_data.append(ldif_entry.strip())
