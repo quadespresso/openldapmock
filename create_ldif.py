@@ -16,7 +16,8 @@ def generate_usernames(num_users):
 
 
 # Generate a random alphanumeric string of length 8
-random_string = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+random_string = "".join(random.choices(string.ascii_letters + string.digits, k=8))
+
 
 def generate_ldif(num_users):
     """Generate dummy LDIF data."""
@@ -44,6 +45,7 @@ dc: example
         first_name = fake.first_name()
         last_name = fake.last_name()
         ldif_entry = f"""
+# Unhashed password: {username}_{random_string}
 dn: uid={username},ou=users,dc=example,dc=com
 objectClass: inetOrgPerson
 uid: {username}
@@ -52,7 +54,6 @@ givenName: {first_name}
 cn: {first_name} {last_name}
 mail: {username}@example.com
 telephoneNumber: {fake.phone_number()}
-# Unhashed password: {username}_{random_string}
 memberOf: cn={group},ou=groups,dc=example,dc=com
 userPassword: {username}_{random_string}
 """
