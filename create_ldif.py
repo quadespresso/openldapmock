@@ -75,6 +75,7 @@ gidNumber: {1000 + groups.index(group) + 1}
 
 
 if __name__ == "__main__":
+    print(f"The password suffix for all users is: _{random_string}")
     ldif_content = generate_ldif(NUM_USERS)
     with open("bootstrap.ldif", "w") as file:
         file.write(ldif_content)
