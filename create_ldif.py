@@ -63,7 +63,7 @@ userPassword: {username}_{random_string}
     for group, members in group_members.items():
         group_dn = f"cn={group},ou=groups,dc=example,dc=com"
         unique_members = "\n".join(
-            [f"uniqueMember: uid={member},ou=users,dc=example,dc=com" for member in members]
+            [f"uniqueMember: uid={member},ou=users,dc=my-domain,dc=com" for member in members]
         )
         group_entry = f"""
 dn: cn={group},ou=groups,dc=my-domain,dc=com
