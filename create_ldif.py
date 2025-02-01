@@ -1,3 +1,5 @@
+import random
+import string
 from faker import Faker
 
 # Constants
@@ -15,6 +17,9 @@ def generate_usernames(num_users):
 
 def generate_ldif(num_users):
     """Generate dummy LDIF data."""
+    # Generate a random alphanumeric string of length 8
+    random_string = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+
     usernames = generate_usernames(num_users)
     ldif_data = [
         """
@@ -47,6 +52,7 @@ cn: {first_name} {last_name}
 mail: {username}@example.com
 telephoneNumber: {fake.phone_number()}
 memberOf: cn={group},ou=groups,dc=example,dc=com
+userPassword: {username}_{random_string}
 """
         ldif_data.append(ldif_entry.strip())
 
