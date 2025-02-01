@@ -25,7 +25,7 @@ def generate_ldif(num_users):
     usernames = generate_usernames(num_users)
     ldif_data = [
         """
-dn: dc=example,dc=com
+dn: dc=my-domain,dc=com
 objectClass: top
 objectClass: dcObject
 objectClass: organization
@@ -47,15 +47,15 @@ dc: example
 
         ldif_entry = f"""
 # Unhashed password: {username}_{random_string}
-dn: uid={username},ou=users,dc=example,dc=com
+dn: uid={username},ou=users,dc=my-domain,dc=com
 objectClass: inetOrgPerson
 uid: {username}
 sn: {last_name}
 givenName: {first_name}
 cn: {first_name} {last_name}
-mail: {username}@example.com
+mail: {username}@my-domain.com
 telephoneNumber: {fake.phone_number()}
-memberOf: cn={group},ou=groups,dc=example,dc=com
+memberOf: cn={group},ou=groups,dc=my-domain,dc=com
 userPassword: {username}_{random_string}
 """
         ldif_data.append(ldif_entry.strip())
@@ -66,7 +66,7 @@ userPassword: {username}_{random_string}
             [f"uniqueMember: uid={member},ou=users,dc=example,dc=com" for member in members]
         )
         group_entry = f"""
-dn: {group_dn}
+dn: cn={group},ou=groups,dc=my-domain,dc=com
 objectClass: top
 objectClass: posixGroup
 cn: {group}
