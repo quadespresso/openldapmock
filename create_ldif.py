@@ -15,7 +15,16 @@ def generate_usernames(num_users):
 def generate_ldif(num_users):
     """Generate dummy LDIF data."""
     usernames = generate_usernames(num_users)
-    ldif_data = []
+    ldif_data = [
+        """
+dn: dc=example,dc=com
+objectClass: top
+objectClass: dcObject
+objectClass: organization
+o: Example Organization
+dc: example
+""".strip()
+    ]
 
     for username in usernames:
         first_name = fake.first_name()
