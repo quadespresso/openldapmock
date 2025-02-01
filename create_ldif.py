@@ -32,21 +32,21 @@ objectClass: top
 objectClass: posixGroup
 cn: Admin
 gidNumber: 1001
-""",
+""".strip(),
         """
 dn: cn=Finance,ou=groups,dc=example,dc=com
 objectClass: top
 objectClass: posixGroup
 cn: Finance
 gidNumber: 1002
-""",
+""".strip(),
         """
 dn: cn=IT,ou=groups,dc=example,dc=com
 objectClass: top
 objectClass: posixGroup
 cn: IT
 gidNumber: 1003
-"""
+""".strip()
     ]
 
     ldif_data.extend(group_entries)
