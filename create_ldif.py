@@ -53,7 +53,11 @@ gidNumber: 1003
 
     ldif_data.extend(group_entries)
 
-    for username in usernames:
+    groups = ["Admin", "Finance", "IT"]
+    group_count = len(groups)
+
+    for index, username in enumerate(usernames):
+        group = groups[index % group_count]
         first_name = fake.first_name()
         last_name = fake.last_name()
         ldif_entry = f"""
@@ -65,7 +69,7 @@ givenName: {first_name}
 cn: {first_name} {last_name}
 mail: {username}@example.com
 telephoneNumber: {fake.phone_number()}
-"""
+memberOf: cn={group},ou=groups,dc=example,dc=com
         ldif_data.append(ldif_entry.strip())
 
     return "\n\n".join(ldif_data)
