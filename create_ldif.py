@@ -1,6 +1,6 @@
 import random
 import string
-from passlib.hash import sha512_crypt
+from passlib.hash import bcrypt
 from faker import Faker
 
 # Constants
@@ -45,8 +45,8 @@ dc: example
         group_members[group].append(username)
         first_name = fake.first_name()
         last_name = fake.last_name()
-        # Generate a hashed password using passlib's SHA-512
-        hashed_password = sha512_crypt.hash(f"{username}_{random_string}")
+        # Generate a hashed password using passlib's bcrypt
+        hashed_password = bcrypt.hash(f"{username}_{random_string}")
 
         ldif_entry = f"""
 # Unhashed password: {username}_{random_string}
