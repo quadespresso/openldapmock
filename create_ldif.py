@@ -27,37 +27,14 @@ dc: example
 """.strip(),
     ]
 
-    group_entries = [
-        """
-dn: cn=Admin,ou=groups,dc=example,dc=com
-objectClass: top
-objectClass: posixGroup
-cn: Admin
-gidNumber: 1001
-""".strip(),
-        """
-dn: cn=Finance,ou=groups,dc=example,dc=com
-objectClass: top
-objectClass: posixGroup
-cn: Finance
-gidNumber: 1002
-""".strip(),
-        """
-dn: cn=IT,ou=groups,dc=example,dc=com
-objectClass: top
-objectClass: posixGroup
-cn: IT
-gidNumber: 1003
-""".strip(),
-    ]
-
-    ldif_data.extend(group_entries)
-
     groups = ["Admin", "Finance", "IT"]
     group_count = len(groups)
 
+    group_members = {group: [] for group in groups}
+
     for index, username in enumerate(usernames):
         group = groups[index % group_count]
+        group_members[group].append(username)
         first_name = fake.first_name()
         last_name = fake.last_name()
         ldif_entry = f"""
@@ -72,6 +49,21 @@ telephoneNumber: {fake.phone_number()}
 memberOf: cn={group},ou=groups,dc=example,dc=com
 """
         ldif_data.append(ldif_entry.strip())
+
+    for group, members in group_members.items():
+        group_dn = f"cn={group},ou=groups,dc=example,dc=com"
+        unique_members = "\n".join(
+            [f"uniqueMember: uid={member},ou=users,dc=example,dc=com" for member in members]
+        )
+        group_entry = f"""
+dn: {group_dn}
+objectClass: top
+objectClass: posixGroup
+cn: {group}
+gidNumber: {1000 + groups.index(group) + 1}
+{unique_members}
+""".strip()
+        ldif_data.append(group_entry)
 
     return "\n\n".join(ldif_data)
 
