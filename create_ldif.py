@@ -1,6 +1,5 @@
 import random
 import string
-from passlib.hash import bcrypt
 from faker import Faker
 
 # Constants
@@ -45,8 +44,6 @@ dc: example
         group_members[group].append(username)
         first_name = fake.first_name()
         last_name = fake.last_name()
-        # Generate a hashed password using passlib's bcrypt
-        hashed_password = bcrypt.hash(f"{username}_{random_string}")
 
         ldif_entry = f"""
 # Unhashed password: {username}_{random_string}
@@ -59,7 +56,7 @@ cn: {first_name} {last_name}
 mail: {username}@example.com
 telephoneNumber: {fake.phone_number()}
 memberOf: cn={group},ou=groups,dc=example,dc=com
-userPassword: {hashed_password}
+userPassword: {username}_{random_string}
 """
         ldif_data.append(ldif_entry.strip())
 
