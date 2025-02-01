@@ -70,6 +70,7 @@ cn: {first_name} {last_name}
 mail: {username}@example.com
 telephoneNumber: {fake.phone_number()}
 memberOf: cn={group},ou=groups,dc=example,dc=com
+"""
         ldif_data.append(ldif_entry.strip())
 
     return "\n\n".join(ldif_data)
