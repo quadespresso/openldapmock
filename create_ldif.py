@@ -44,4 +44,5 @@ mail: {username}@example.com
 
 if __name__ == "__main__":
     ldif_content = generate_ldif(NUM_USERS)
-    print(ldif_content)
+    with open("output.ldif", "w") as file:
+        file.write(ldif_content)
