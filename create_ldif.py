@@ -20,8 +20,6 @@ random_string = ''.join(random.choices(string.ascii_letters + string.digits, k=8
 
 def generate_ldif(num_users):
     """Generate dummy LDIF data."""
-    # Generate a random alphanumeric string of length 8
-    random_string = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
 
     usernames = generate_usernames(num_users)
     ldif_data = [
