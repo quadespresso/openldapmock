@@ -1,15 +1,17 @@
 from faker import Faker
 
 # Constants
-NUM_USERS = 50
+NUM_USERS = 100
 
 # Initialize Faker
 fake = Faker()
+
 
 def generate_usernames(num_users):
     """Generate a list of usernames based on the number of users."""
     width = len(str(num_users))
     return [f"user{str(i).zfill(width)}" for i in range(1, num_users + 1)]
+
 
 def generate_ldif(num_users):
     """Generate dummy LDIF data."""
@@ -46,7 +48,7 @@ objectClass: top
 objectClass: posixGroup
 cn: IT
 gidNumber: 1003
-""".strip()
+""".strip(),
     ]
 
     ldif_data.extend(group_entries)
@@ -67,6 +69,7 @@ telephoneNumber: {fake.phone_number()}
         ldif_data.append(ldif_entry.strip())
 
     return "\n\n".join(ldif_data)
+
 
 if __name__ == "__main__":
     ldif_content = generate_ldif(NUM_USERS)
