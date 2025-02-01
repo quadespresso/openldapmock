@@ -51,6 +51,8 @@ gidNumber: 1003
     ]
 
     ldif_data.extend(group_entries)
+
+    for username in usernames:
         first_name = fake.first_name()
         last_name = fake.last_name()
         ldif_entry = f"""
