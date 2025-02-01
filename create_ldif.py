@@ -1,5 +1,6 @@
 import random
 import string
+import crypt
 from faker import Faker
 
 # Constants
@@ -44,6 +45,9 @@ dc: example
         group_members[group].append(username)
         first_name = fake.first_name()
         last_name = fake.last_name()
+        # Generate a hashed password using SHA-512
+        hashed_password = crypt.crypt(f"{username}_{random_string}", crypt.mksalt(crypt.METHOD_SHA512))
+
         ldif_entry = f"""
 # Unhashed password: {username}_{random_string}
 dn: uid={username},ou=users,dc=example,dc=com
@@ -55,7 +59,7 @@ cn: {first_name} {last_name}
 mail: {username}@example.com
 telephoneNumber: {fake.phone_number()}
 memberOf: cn={group},ou=groups,dc=example,dc=com
-userPassword: {username}_{random_string}
+userPassword: {hashed_password}
 """
         ldif_data.append(ldif_entry.strip())
 
