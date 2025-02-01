@@ -26,7 +26,31 @@ dc: example
 """.strip()
     ]
 
-    for username in usernames:
+    group_entries = [
+        """
+dn: cn=Admin,ou=groups,dc=example,dc=com
+objectClass: top
+objectClass: posixGroup
+cn: Admin
+gidNumber: 1001
+""",
+        """
+dn: cn=Finance,ou=groups,dc=example,dc=com
+objectClass: top
+objectClass: posixGroup
+cn: Finance
+gidNumber: 1002
+""",
+        """
+dn: cn=IT,ou=groups,dc=example,dc=com
+objectClass: top
+objectClass: posixGroup
+cn: IT
+gidNumber: 1003
+"""
+    ]
+
+    ldif_data.extend(group_entries)
         first_name = fake.first_name()
         last_name = fake.last_name()
         ldif_entry = f"""
