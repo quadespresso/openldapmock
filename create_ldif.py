@@ -22,7 +22,7 @@ objectClass: dcObject
 objectClass: organization
 o: Example Organization
 dc: example
-""".strip()
+""".strip(),
     ]
 
     group_entries = [
