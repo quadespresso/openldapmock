@@ -30,7 +30,7 @@ objectClass: top
 objectClass: dcObject
 objectClass: organization
 o: Example Organization
-dc: example
+dc: my-domain
 """.strip(),
     ]
 
@@ -61,7 +61,7 @@ userPassword: {username}_{random_string}
         ldif_data.append(ldif_entry.strip())
 
     for group, members in group_members.items():
-        group_dn = f"cn={group},ou=groups,dc=example,dc=com"
+        group_dn = f"cn={group},ou=groups,dc=my-domain,dc=com"
         unique_members = "\n".join(
             [f"uniqueMember: uid={member},ou=users,dc=my-domain,dc=com" for member in members]
         )
