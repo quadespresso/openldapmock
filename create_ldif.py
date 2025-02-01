@@ -36,6 +36,7 @@ uid: {username}
 sn: {last_name}
 givenName: {first_name}
 cn: {first_name} {last_name}
+mail: {username}@example.com
 """
         ldif_data.append(ldif_entry.strip())
 
