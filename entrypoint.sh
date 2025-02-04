@@ -14,7 +14,7 @@ while [ "$#" -gt 0 ]; do
       COUNT="$2"
       shift 2
     else
-      echo "Error: Argument for $1 must be an integer." >&2
+      echo "Error: Argument for $1 must be a positive integer." >&2
       exit 1
     fi
     ;;
