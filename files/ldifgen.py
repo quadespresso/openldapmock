@@ -1,9 +1,10 @@
+import os
 import random
 import string
 from faker import Faker
 
 # Constants
-NUM_USERS = 100
+NUM_USERS = int(os.getenv("COUNT", 100))
 LDIF_FILE = "/ldap/init.ldif"
 
 # Initialize Faker
