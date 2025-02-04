@@ -5,6 +5,15 @@ COUNT=""
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
+  -h | --help)
+    echo "Usage: $0 [options]"
+    echo
+    echo "Options:"
+    echo "  -v, --verbose   Enable verbose mode"
+    echo "  -c, --count     Specify a positive integer for the count"
+    echo "  -h, --help      Display this help message"
+    exit 0
+    ;;
   -v | --verbose)
     VERBOSE="-v"
     shift
