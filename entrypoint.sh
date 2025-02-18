@@ -6,7 +6,7 @@ COUNT=""
 while [ "$#" -gt 0 ]; do
   case "$1" in
   -h | --help)
-    echo "Usage: $0 [options]"
+    echo "Usage: docker run <image> [options]"
     echo
     echo "Options:"
     echo "  -v, --verbose   Enable verbose mode"
