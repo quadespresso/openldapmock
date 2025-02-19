@@ -42,6 +42,14 @@ echo "Creating LDIF based on the COUNT environment variable (default: 100)..."
 GEN_OUT=$(python /ldap/ldifgen.py)
 echo "${GEN_OUT}"
 
+echo "Adding TLS to the config..."
+cat /ldap/tls.conf >>/etc/openldap/slapd.conf
+
+echo "Generating self-signed certificate (valid for 365 days)..."
+openssl ecparam -name secp384r1 -out /ldap/ecparam.pem
+openssl req -x509 -nodes -days 365 -newkey ec:/ldap/ecparam.pem \
+  -keyout /ldap/ldaps.key -out /ldap/ldaps.crt -subj "/CN=localhost"
+
 echo "Initializing LDAP database from /ldap/init.ldif..."
 rm -rf /var/lib/openldap/data/*
 slapadd $VERBOSE -l /ldap/init.ldif
@@ -54,4 +62,4 @@ echo "${GEN_OUT}"
 echo
 
 echo "Starting slapd..."
-exec slapd -d 256
+exec slapd -d 256 -h "ldap:/// ldaps:///"

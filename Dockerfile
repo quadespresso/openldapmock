@@ -7,9 +7,8 @@ RUN apk add --no-cache busybox musl libldap libltdl libsasl \
   && pip3 install --no-cache-dir faker
 
 COPY files /ldap
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+RUN mv /ldap/entrypoint.sh / && chmod +x /entrypoint.sh
 
-EXPOSE 389
+EXPOSE 389 636
 
 ENTRYPOINT ["/entrypoint.sh"]
