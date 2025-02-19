@@ -17,6 +17,7 @@ The container image this repo encompasses will, when ran, do the following:
 1. for each username, the password is the username + `_` + the password stub generated earlier
    eg, for the username `user42` and password stub `abc123`, the password would be `user42_abc123`
 1. assign each username to one of the curated groups on a round-robin basis
+1. create a new TLS certificate and configure the server accordingly
 1. start an OpenLDAP server with the generated users, listening on port 389
 
 ### Note
@@ -63,6 +64,10 @@ Once the container is terminated, the password stub will be lost.
 
 You can find the ephemeral password stub in the container logs.
 
+#### TLS certificate is ephemeral
+
+The TLS certificate generated is ephemeral and will be lost once the container is terminated.
+
 ## Usage
 
 To build the image:
@@ -74,7 +79,7 @@ docker build -t <name:tag> .
 To run the image:
 
 ```bash
-docker run -d -p 389:389 <name:tag> [options]
+docker run -d -p 389:389 -p 636:636 <name:tag> [options]
 ```
 
 where `[options]` can be one or more of the following:
@@ -93,7 +98,7 @@ and then run it as needed.
 When in doubt, run it with `-h`/`--help` to see the available options:
 
 ```bash
-❯ docker run -it --rm -p 389:389 --name slapd quaddo/openldapmock:latest -h
+❯ docker run -it --rm -p 389:389 -p 636:636 --name slapd quaddo/openldapmock:latest -h
 Usage: docker run <image> [options]
 
 Options:
@@ -102,18 +107,20 @@ Options:
   -h, --help      Display this help message
 ```
 
+Running the container on both ports is optional; you should only use `-p 389:389` for troubleshooting.
+
 ### Examples
 
 Run the container with no options:
 
 ```bash
-docker run -it --rm -p 389:389 --name slapd quaddo/openldapmock:latest
+docker run -it --rm -p 389:389 -p 636:636 --name slapd quaddo/openldapmock:latest
 ```
 
 Example output from the above command:
 
 ```bash
-❯ docker run -it --rm -p 389:389 --name slapd quaddo/openldapmock:latest
+❯ docker run -it --rm -p 389:389 -p 636:636 --name slapd quaddo/openldapmock:latest
 Unable to find image 'quaddo/openldapmock:latest' locally
 latest: Pulling from quaddo/openldapmock
 Digest: sha256:5e02de850e7de106e87d69a269e6530fdd2390ccabc383f44c5789a20b5ec433
@@ -138,13 +145,13 @@ Starting slapd...
 Run the container with additional verbosity:
 
 ```bash
-docker run -it --rm -p 389:389 --name slapd quaddo/openldapmock:latest -v
+docker run -it --rm -p 389:389 -p 636:636 --name slapd quaddo/openldapmock:latest -v
 ```
 
 Run the container, specifying 200 users:
 
 ```bash
-docker run -it --rm -p 389:389 --name slapd quaddo/openldapmock:latest -c 200
+docker run -it --rm -p 389:389 -p 636:636 --name slapd quaddo/openldapmock:latest -c 200
 ```
 
 ## Client configuration
@@ -174,6 +181,8 @@ spec: # line included for context
         emailAttr: mail
         nameAttr: cn
 ```
+
+(As of this writing, port 636 (LDAPS) has not been tested.)
 
 ### MKE3 configuration
 
@@ -207,6 +216,15 @@ Note the admin password specified above.
 
 To verify, you can use the following:
 
+LDAP:
+
 ```bash
 ldapsearch -H ldap://localhost -D "cn=Manager,dc=my-domain,dc=com" -w secret -b dc=my-domain,dc=com
+```
+
+LDAPS:
+
+```bash
+LDAPTLS_REQCERT=never ldapsearch -H ldaps://localhost -D "cn=Manager,dc=my-domain,dc=com" \
+    -w secret -b dc=my-domain,dc=com
 ```
