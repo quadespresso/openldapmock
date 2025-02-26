@@ -13,8 +13,8 @@ fake = Faker()
 
 def generate_usernames(num_users):
     """Generate a list of usernames based on the number of users."""
-    width = len(str(num_users))
-    return [f"user{str(i).zfill(width)}" for i in range(1, num_users + 1)]
+    width = len(str(num_users - 1))
+    return [f"user{str(i).zfill(width)}" for i in range(num_users)]
 
 
 # Generate a random alphanumeric string of length 8
