@@ -163,6 +163,8 @@ the following configuration block has been tested and known to work. Shared here
 are always nice to have. Other than the host IP, everything else in this example should be usable
 as-is:
 
+When using LDAP (insecure):
+
 ```yaml
 spec: # line included for context
   authentication:
@@ -182,7 +184,44 @@ spec: # line included for context
         nameAttr: cn
 ```
 
-(As of this writing, port 636 (LDAPS) has not been tested.)
+When using LDAPS (TLS):
+
+```yaml
+spec: # line included for context
+  authentication:
+    ldap:
+      enabled: true
+      host: <IP of LDAP server>:636 # change me
+      insecureNoSSL: false
+      insecureSkipVerify: true
+      rootCAData: <base64 encoded CA cert without line-wrap> # change me
+      bindDN: cn=Manager,dc=my-domain,dc=com
+      bindPW: secret
+      usernamePrompt: Email Address
+      userSearch:
+        baseDN: ou=users,dc=my-domain,dc=com
+        filter: "(objectClass=person)"
+        username: uid
+        idAttr: DN
+        emailAttr: mail
+        nameAttr: cn
+```
+
+For the `rootCAData` field, you can use the following commands to generate the base64-encoded CA cert:
+
+First, download the certificate:
+
+```bash
+openssl s_client -showcerts -connect 3.137.41.204:636 </dev/null | openssl x509 -outform PEM -out mycacert.pem
+```
+
+Next, convert the certificate to a base64-encoded string (line-wrap disabled):
+
+```bash
+cat mycacert.pem | base64 -w0
+```
+
+Finally, copy the output and paste it into the `rootCAData` field.
 
 ### MKE3 configuration
 
